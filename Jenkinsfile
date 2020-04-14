@@ -73,7 +73,6 @@ pipeline {
 							sh "fastlane tests --env config"
 						} catch(Exception e) {
 							currentBuild.result = "UNSTABLE"
-							s.failed = true
 							sh "mkdir -p build || true"
 						}
 				}
