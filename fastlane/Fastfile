@@ -26,6 +26,29 @@ codesign_certificate = ENV["CODESIGN_CERTIFICATE"]
 # Output build name
 output_build_name = ""
 
+
+
+lane :buildbump do
+
+    version = get_version_number
+    build = increment_build_number
+    commit_version_bump(
+      xcodeproj:"MyProject.xcodeproj",
+      message: "[ver++] v#{version} (#{build})"
+    )
+  end
+
+lane :versionbump do
+
+    version = increment_version_number
+    build = increment_build_number(build_number: 1)
+    commit_version_bump(
+      xcodeproj:"MyProject.xcodeproj",
+      message: "[ver++] v#{version} (#{build})"
+    )
+
+end
+
 # Lane to run unit test cases
 lane :tests do
         # Generate code coverage report
