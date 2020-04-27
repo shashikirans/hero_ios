@@ -29,7 +29,7 @@ pipeline {
 		    steps {
 				script {
 					try {
-						swiftformat_cmd = "Pods/SwiftFormat/CommandLineTool/swiftformat ./ --exclude Pods --swiftversion 5.0.1 --wraparguments before-first --wrapcollections before-first --importgrouping testable-bottom"
+						swiftformat_cmd = "swiftformat ./ --exclude Pods --swiftversion 5.0.1 --wraparguments before-first --wrapcollections before-first --importgrouping testable-bottom"
 						sh swiftformat_cmd + " --lint"
 						sh "echo SwiftFormat completed successfully, please refer to console output for more info. > swiftformat.txt"
 					} catch(Exception e) {
