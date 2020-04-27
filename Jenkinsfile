@@ -35,7 +35,7 @@ pipeline {
 					} catch(Exception e) {
 						currentBuild.result = "UNSTABLE"
 						sh "echo Please run Hero unit tests in Xcode with Command+U. This will automatically run swiftformat. > swiftformat.txt"
-						sh "echo You should ALWAYS run unit tests before submitting a PR. >>" + s.resultsOutputFile
+						sh "echo You should ALWAYS run unit tests before submitting a PR. >> swiftformat.txt"
 						sh "echo Here are the possible chances will be applied, please pay attention to your coding style: >> swiftformat.txt"
 						sh swiftformat_cmd
 					}
