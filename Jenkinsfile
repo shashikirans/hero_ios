@@ -25,24 +25,26 @@ pipeline {
 		// 	}
 		// }
 
-
-		// << Pods Integrity Stage >>
-		// stage('PodsIntegrity') {
-		// 	steps {
-		// 		script {
-		// 			try {
-		// 				sh "git branch -a"
-		// 				sh "./DevOps/ci/script/check-pods-integrity.swift > " + s.resultsOutputFile
-		// 				// sh "./DevOps/ci/script/check-pods-integrity > " + s.resultsOutputFile
-		// 			} catch(Exception e) {
-		// 				currentBuild.result = "UNSTABLE"
-		// 				s.failed = true
-		// 				sh "echo PodsIntegrity stage failed. >> " + s.resultsOutputFile
-		// 			}
-		// 			stash includes: s.resultsOutputFile, name: s.stashName
-		// 		}
-		// 	}
-		// }
+        stage('SwiftFormat') {
+		    steps {
+				script {
+					s = stages.swiftformat
+					try {
+						swiftformat_cmd = "Pods/SwiftFormat/CommandLineTool/swiftformat ./ --exclude Pods --swiftversion 5.0.1 --wraparguments before-first --wrapcollections before-first --importgrouping testable-bottom"
+						sh swiftformat_cmd + " --lint"
+						sh "echo SwiftFormat completed successfully, please refer to console output for more info. > swiftformat.txt"
+					} catch(Exception e) {
+						currentBuild.result = "UNSTABLE"
+						s.failed = true
+						sh "echo Please run Hero unit tests in Xcode with Command+U. This will automatically run swiftformat. > swiftformat.txt"
+						sh "echo You should ALWAYS run unit tests before submitting a PR. >>" + s.resultsOutputFile
+						sh "echo Here are the possible chances will be applied, please pay attention to your coding style: >> swiftformat.txt"
+						sh swiftformat_cmd
+						//sh "git reset HEAD --hard"
+					}
+				}
+			}
+  		}
 
 		// << CodeBase formating using SwiftFormat  >>
 		// // << CodeBase Linting using SwiftLint  >>
