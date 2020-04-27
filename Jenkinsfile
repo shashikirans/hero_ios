@@ -68,7 +68,6 @@ pipeline {
 				script {
 
 						try {
-                            sh 'pod install'
 							sh "fastlane tests --env config"
 						} catch(Exception e) {
 							currentBuild.result = "UNSTABLE"
