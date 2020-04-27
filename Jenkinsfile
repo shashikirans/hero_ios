@@ -28,7 +28,6 @@ pipeline {
         stage('SwiftFormat') {
 		    steps {
 				script {
-					s = stages.swiftformat
 					try {
 						swiftformat_cmd = "Pods/SwiftFormat/CommandLineTool/swiftformat ./ --exclude Pods --swiftversion 5.0.1 --wraparguments before-first --wrapcollections before-first --importgrouping testable-bottom"
 						sh swiftformat_cmd + " --lint"
@@ -40,7 +39,6 @@ pipeline {
 						sh "echo You should ALWAYS run unit tests before submitting a PR. >>" + s.resultsOutputFile
 						sh "echo Here are the possible chances will be applied, please pay attention to your coding style: >> swiftformat.txt"
 						sh swiftformat_cmd
-						//sh "git reset HEAD --hard"
 					}
 				}
 			}
