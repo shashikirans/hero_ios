@@ -15,7 +15,7 @@ pipeline {
 		stage('Git Checkout') {
 			steps {
 				checkout scm
-                sh 'fastlane versionbump'
+                // sh 'fastlane versionbump'
 			}
 		}
 
