@@ -34,7 +34,6 @@ pipeline {
 						sh "echo SwiftFormat completed successfully, please refer to console output for more info. > swiftformat.txt"
 					} catch(Exception e) {
 						currentBuild.result = "UNSTABLE"
-						s.failed = true
 						sh "echo Please run Hero unit tests in Xcode with Command+U. This will automatically run swiftformat. > swiftformat.txt"
 						sh "echo You should ALWAYS run unit tests before submitting a PR. >>" + s.resultsOutputFile
 						sh "echo Here are the possible chances will be applied, please pay attention to your coding style: >> swiftformat.txt"
