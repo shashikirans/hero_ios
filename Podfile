@@ -4,6 +4,7 @@ target 'HeroExamples' do
   platform :ios, '9.0'
   use_frameworks!
   pod 'CollectionKit'
+  pod 'SwiftFormat/CLI'
 
   target 'HeroTests' do
     inherit! :search_paths

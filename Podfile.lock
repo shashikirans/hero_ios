@@ -2,17 +2,22 @@ PODS:
   - CollectionKit (2.2.0):
     - CollectionKit/Core (= 2.2.0)
   - CollectionKit/Core (2.2.0)
+  - SwiftFormat/CLI (0.44.7)
 
 DEPENDENCIES:
   - CollectionKit
+  - SwiftFormat/CLI
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - CollectionKit
+  trunk:
+    - SwiftFormat
 
 SPEC CHECKSUMS:
   CollectionKit: 5caa5341860d4c9b748ebfeaab97530b2d02c7c0
+  SwiftFormat: fd97e27b8de5a46c9d1988bf1db1dc92e79f86a3
 
-PODFILE CHECKSUM: efc6b025c2cee81dcc6fa480009618ed1af56837
+PODFILE CHECKSUM: 6eb729b81dddc05110842479e95a4061684f2cfc
 
 COCOAPODS: 1.8.3
