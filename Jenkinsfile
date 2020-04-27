@@ -58,12 +58,11 @@ pipeline {
 						}
 			    }
 		    }
-			// post {
-			// 	always {
-			// 		// step([$class: 'CheckStylePublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/build/swiftlint.result.xml', unHealthy: ''])
-			// 		// stash includes: s.resultsOutputFile, name: s.stashName
-			// 	}
-			// }
+			post {
+				always {
+					step([$class: 'CheckStylePublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/build/swiftlint.result.xml', unHealthy: ''])
+				}
+			}
 		}
 
 		// << CodeBase Unit Testing  >>
@@ -80,11 +79,11 @@ pipeline {
 						}
 				}
 			}
-			// post {
-			// 	always {
-			// 		junit(testResults: '**/build/report.junit', allowEmptyResults: true)
-			// 	}
-			// }
+			post {
+				always {
+					junit(testResults: '**/build/report.junit', allowEmptyResults: true)
+				}
+			}
 		}
 
 		// << Swift Unit TestCoverage >>
@@ -99,11 +98,11 @@ pipeline {
 						}
 				}
 			}
-			// post {
-			// 	success {
-			// 		step([$class: 'CoberturaPublisher', coberturaReportFile: '**/build/cobertura.xml', autoUpdateHealth: false, autoUpdateStability: false,failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
-			// 	}
-      		// }
+			post {
+				success {
+					step([$class: 'CoberturaPublisher', coberturaReportFile: '**/build/cobertura.xml', autoUpdateHealth: false, autoUpdateStability: false,failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
+				}
+      		}
 		}
 
 	}
