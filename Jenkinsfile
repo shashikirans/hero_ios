@@ -68,6 +68,7 @@ pipeline {
 				script {
 
 						try {
+                            sh 'pod install'
 							sh "fastlane tests --env config"
 						} catch(Exception e) {
 							currentBuild.result = "UNSTABLE"
@@ -103,7 +104,7 @@ pipeline {
 				}
 			}
 			post {
-				success {
+				always {
 					step([$class: 'CoberturaPublisher', coberturaReportFile: '**/build/cobertura.xml', autoUpdateHealth: false, autoUpdateStability: false,failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
 				}
       		}
