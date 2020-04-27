@@ -15,14 +15,15 @@ pipeline {
 		stage('Git Checkout') {
 			steps {
 				checkout scm
+                sh 'fastlane versionbump'
 			}
 		}
 
-        stage('Bump Version') {
-			steps {
-				sh 'fastlane versionbump'
-			}
-		}
+        // stage('Bump Version') {
+		// 	steps {
+		// 		sh 'fastlane versionbump'
+		// 	}
+		// }
 
 		// // << Copying Provision Profiles to build server>>
 		// stage('Provision Profiles')  {
