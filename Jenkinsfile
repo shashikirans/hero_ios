@@ -18,6 +18,12 @@ pipeline {
 			}
 		}
 
+        stage('Bump Version') {
+			steps {
+				sh 'fastlane versionbump'
+			}
+		}
+
 		// // << Copying Provision Profiles to build server>>
 		// stage('Provision Profiles')  {
 		// 	steps {
@@ -25,23 +31,23 @@ pipeline {
 		// 	}
 		// }
 
-        stage('SwiftFormat') {
-		    steps {
-				script {
-					try {
-						swiftformat_cmd = "Pods/SwiftFormat/CommandLineTool/swiftformat ./ --exclude Pods --swiftversion 5.0.1 --wraparguments before-first --wrapcollections before-first --importgrouping testable-bottom"
-						sh swiftformat_cmd + " --lint"
-						sh "echo SwiftFormat completed successfully, please refer to console output for more info. > swiftformat.txt"
-					} catch(Exception e) {
-						// currentBuild.result = "UNSTABLE"
-						sh "echo Please run Hero unit tests in Xcode with Command+U. This will automatically run swiftformat. > swiftformat.txt"
-						sh "echo You should ALWAYS run unit tests before submitting a PR. >> swiftformat.txt"
-						sh "echo Here are the possible chances will be applied, please pay attention to your coding style: >> swiftformat.txt"
-						sh swiftformat_cmd
-					}
-				}
-			}
-  		}
+        // stage('SwiftFormat') {
+		//     steps {
+		// 		script {
+		// 			try {
+		// 				swiftformat_cmd = "Pods/SwiftFormat/CommandLineTool/swiftformat ./ --exclude Pods --swiftversion 5.0.1 --wraparguments before-first --wrapcollections before-first --importgrouping testable-bottom"
+		// 				sh swiftformat_cmd + " --lint"
+		// 				sh "echo SwiftFormat completed successfully, please refer to console output for more info. > swiftformat.txt"
+		// 			} catch(Exception e) {
+		// 				// currentBuild.result = "UNSTABLE"
+		// 				sh "echo Please run Hero unit tests in Xcode with Command+U. This will automatically run swiftformat. > swiftformat.txt"
+		// 				sh "echo You should ALWAYS run unit tests before submitting a PR. >> swiftformat.txt"
+		// 				sh "echo Here are the possible chances will be applied, please pay attention to your coding style: >> swiftformat.txt"
+		// 				sh swiftformat_cmd
+		// 			}
+		// 		}
+		// 	}
+  		// }
 
 		// << CodeBase formating using SwiftFormat  >>
 		// // << CodeBase Linting using SwiftLint  >>
@@ -102,11 +108,11 @@ pipeline {
 						}
 				}
 			}
-			// post {
-			// 	always {
-			// 		step([$class: 'CoberturaPublisher', coberturaReportFile: '**/build/cobertura.xml', autoUpdateHealth: false, autoUpdateStability: false,failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
-			// 	}
-      		// }
+			post {
+				always {
+					step([$class: 'CoberturaPublisher', coberturaReportFile: '**/build/cobertura.xml', autoUpdateHealth: false, autoUpdateStability: false,failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
+				}
+      		}
 		}
 
 	}
