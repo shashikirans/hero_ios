@@ -68,7 +68,6 @@ pipeline {
 				script {
 
 						try {
-                            sh "pod install"
 							sh "fastlane tests --env config"
 						} catch(Exception e) {
 							currentBuild.result = "UNSTABLE"
@@ -79,6 +78,14 @@ pipeline {
 			post {
 				always {
 					junit(testResults: '**/build/report.junit', allowEmptyResults: true)
+                     publishHTML (target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'coverage',
+                        reportFiles: 'index.html',
+                        reportName: "Junit Report"
+                     ])
 				}
 			}
 		}
