@@ -38,12 +38,13 @@ pipeline {
 					try {
 						swiftformat_cmd = "Pods/SwiftFormat/CommandLineTool/swiftformat ./ --exclude Pods --swiftversion 5.0.1 --wraparguments before-first --wrapcollections before-first --importgrouping testable-bottom"
 						sh swiftformat_cmd + " --lint"
-						sh "echo SwiftFormat completed successfully, please refer to console output for more info. > swiftformat.txt"
+                        sh 'mkdir build'
+						sh "echo SwiftFormat completed successfully, please refer to console output for more info. > build/swiftformat.txt"
 					} catch(Exception e) {
 						// currentBuild.result = "UNSTABLE"
-						sh "echo Please run Hero unit tests in Xcode with Command+U. This will automatically run swiftformat. > swiftformat.txt"
-						sh "echo You should ALWAYS run unit tests before submitting a PR. >> swiftformat.txt"
-						sh "echo Here are the possible chances will be applied, please pay attention to your coding style: >> swiftformat.txt"
+						sh "echo Please run Hero unit tests in Xcode with Command+U. This will automatically run swiftformat. > build/swiftformat.txt"
+						sh "echo You should ALWAYS run unit tests before submitting a PR. >> build/swiftformat.txt"
+						sh "echo Here are the possible chances will be applied, please pay attention to your coding style: >> build/swiftformat.txt"
 						sh swiftformat_cmd
 					}
 				}
@@ -117,5 +118,11 @@ pipeline {
       		}
 		}
 
+	}
+
+    post {
+			always {
+				archiveArtifacts artifacts: '**/build/*', onlyIfSuccessful: true
+			}
 	}
 }
