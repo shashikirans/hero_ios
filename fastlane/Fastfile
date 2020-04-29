@@ -26,17 +26,6 @@ codesign_certificate = ENV["CODESIGN_CERTIFICATE"]
 # Output build name
 output_build_name = ""
 
-lane :versionbump do
-    version = increment_version_number
-    build = increment_build_number(build_number: 1)
-    commit_version_bump(
-      xcodeproj:"Hero.xcodeproj",
-      message: "[ver++] v#{version} (#{build})",
-      force: true
-    )
-    push_to_git_remote(remote: "origin", local_branch: "HEAD", remote_branch: "develop", force: true, tags: true)
-end
-
 # Lane to run unit test cases
 lane :tests do
         # Generate code coverage report
@@ -69,10 +58,10 @@ platform :ios do
         puts options
 
         # Increment build number
-		    # updated_build_num = increment_build_number(xcodeproj: project)
+		    updated_build_num = increment_build_number(xcodeproj: project)
 
         # Build Name
-		    # generate_build_name
+		    generate_build_name
 
         # Generate build
         generate_build
@@ -121,11 +110,6 @@ platform :ios do
           else
             args[:project] = ENV["APP_PROJECT"]
           end
-        #   match(
-        #     readonly: true
-        #   )
-
-        # match(type: "adhoc", readonly: true)
         gym(args)
     end
 
@@ -138,7 +122,6 @@ platform :ios do
         reporter: "checkstyle",                         # The custom reporter to use (optional)
         config_file: "./.swiftlint.yml",               # The path of the configuration file (optional)
         ignore_exit_status: true,                     # Allow fastlane to continue even if SwiftLint returns a non-zero exit status (Default: false)
-        # strict: true
 	)
     end
 
@@ -175,7 +158,7 @@ platform :ios do
       when 'testfairy'
           # Push build on to TestFairy
           testfairy(api_key: ENV["DISTRIBUTION_API_TOKEN"],
-                      ipa: "./#{ENV['APP_WORKSPACE']}/Vega.ipa",
+                      ipa: "./#{ENV['APP_WORKSPACE']}/*.ipa",
                       # symbols_file: '**/ENV['APP_WORKSPACE']/*.app.dSYM.zip',
                       comment: changelog,
                       testers_groups: ENV["GROUPS"],
@@ -185,9 +168,5 @@ platform :ios do
           # No channel opted for notifing build release
           puts "No distribution opted to upload app"
         end
-
-      # Publish to the channel
-      # publish(build_name: output_build_name, version_num: get_version_number(target: ENV["APP_TARGET"]))
-
     end
 end

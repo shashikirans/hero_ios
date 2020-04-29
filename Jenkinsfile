@@ -2,7 +2,7 @@
 
 pipeline {
     agent any
-	environment {
+	    environment {
         	LC_ALL = 'en_US.UTF-8'
         	LANG    = 'en_US.UTF-8'
         	LANGUAGE = 'en_US.UTF-8'
@@ -15,15 +15,8 @@ pipeline {
 		stage('Git Checkout') {
 			steps {
 				checkout scm
-                // sh 'fastlane versionbump'
 			}
 		}
-
-        // stage('Bump Version') {
-		// 	steps {
-		// 		sh 'fastlane versionbump'
-		// 	}
-		// }
 
 		// // << Copying Provision Profiles to build server>>
 		// stage('Provision Profiles')  {
@@ -36,14 +29,11 @@ pipeline {
 		    steps {
 				script {
 					try {
-                        sh 'pod install'
 						swiftformat_cmd = "Pods/SwiftFormat/CommandLineTool/swiftformat ./ --exclude Pods --swiftversion 5.0.1 --wraparguments before-first --wrapcollections before-first --importgrouping testable-bottom"
 						sh swiftformat_cmd + " --lint"
-                        sh 'mkdir build'
 						sh "echo SwiftFormat completed successfully, please refer to console output for more info. > build/swiftformat.txt"
-					} catch(Exception e) {
+					}catch(Exception e) {
 						// currentBuild.result = "UNSTABLE"
-                        sh 'mkdir build'
 						sh "echo Please run Hero unit tests in Xcode with Command+U. This will automatically run swiftformat. > build/swiftformat.txt"
 						sh "echo You should ALWAYS run unit tests before submitting a PR. >> build/swiftformat.txt"
 						sh "echo Here are the possible chances will be applied, please pay attention to your coding style: >> build/swiftformat.txt"
@@ -63,20 +53,19 @@ pipeline {
 						} catch(Exception e){
 							currentBuild.result = "UNSTABLE"
 						}
-			    }
+			        }
 		    }
-			post {
-				always {
-					step([$class: 'CheckStylePublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/build/swiftlint.result.xml', unHealthy: ''])
-				}
-			}
+            post {
+                always {
+                    step([$class: 'CheckStylePublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/build/swiftlint.result.xml', unHealthy: ''])
+                }
+            }
 		}
 
 		// << CodeBase Unit Testing  >>
 		stage('Unit Testing') {
 		    steps {
 				script {
-
 						try {
                             sh 'pod install'
 							sh "fastlane tests --env config"
@@ -89,14 +78,6 @@ pipeline {
 			post {
 				always {
 					junit(testResults: '**/build/report.junit', allowEmptyResults: true)
-                     publishHTML (target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'build',
-                        reportFiles: 'report.html',
-                        reportName: "Junit Report"
-                     ])
 				}
 			}
 		}
@@ -120,8 +101,35 @@ pipeline {
       		}
 		}
 
-	}
+        // << IOS Build >>
+		/*
+		stage('IOSBuild') {
+			steps {
+				script {
+						try {
+							sh "fastlane env"
+							sh "fastlane build --env config"
+							sh "echo Build completed successfully, please refer console output for more info.. >> result.txt"
+							stash includes: 'result.txt', name: 'buildResults'
+						}
+						catch(Exception e) {
+							currentBuild.result = "UNSTABLE"
+							buildresult=false
+							sh "echo Build failed, please refer console output for more info.. >> result.txt"
+							stash includes: 'result.txt', name: 'buildResults'
+						}
+				}
+		    }
+		}
+		*/
 
+        // << IOS TestFairyUpload >>
+		// stage('TestFairyUpload') {
+		// 	steps {
+		// 			sh "fastlane upload --env config"
+		//     }
+		// }
+	}
     post {
 			always {
 				archiveArtifacts artifacts: '**/build/*', onlyIfSuccessful: true
