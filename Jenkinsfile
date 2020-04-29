@@ -36,6 +36,7 @@ pipeline {
 		    steps {
 				script {
 					try {
+                        sh 'pod install'
 						swiftformat_cmd = "Pods/SwiftFormat/CommandLineTool/swiftformat ./ --exclude Pods --swiftversion 5.0.1 --wraparguments before-first --wrapcollections before-first --importgrouping testable-bottom"
 						sh swiftformat_cmd + " --lint"
                         sh 'mkdir build'
