@@ -67,7 +67,7 @@ end
             force: true
           )
 
-          sh("git push origin HEAD:develop_new")
+          sh("git push origin develop_new")
     #   push_to_git_remote(remote: "origin", local_branch: "HEAD", remote_branch: options[:remote_branch], force: false)
     end
 
