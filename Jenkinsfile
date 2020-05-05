@@ -30,9 +30,7 @@ pipeline {
 		stage('AutomaticVersioning') {
 			steps {
 				script {
-					dir("Vega") {
 						sh "fastlane versionbump remote_branch:${env.BRANCH_NAME} --env config"
-					}
 				}
 			}
         }
