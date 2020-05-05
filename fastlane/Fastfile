@@ -51,21 +51,21 @@ lane :tests do
       scan(test_args)
 end
 
-lane :versionbump do |options|
-    p options[:remote_branch]
-        version = get_version_number(target: ENV["APP_TARGET"])
-        p version
-        new_version = increment_version_number(version_number: version)
-        p new_version
-        build = increment_build_number(build_number: new_version)
-        p build
-        commit_version_bump(
-          xcodeproj: ENV["APP_PROJECT"],
-          message: "[ver++] (#{build})",
-          force: true
-        )
-    push_to_git_remote(remote: "origin", local_branch: "HEAD", remote_branch: options[:remote_branch], force: false)
-  end
+    lane :versionbump do |options|
+      p options[:remote_branch]
+          version = get_version_number(target: "Hero (iOS)")
+          p version
+          new_version = increment_version_number(version_number: version)
+          p new_version
+          build = increment_build_number(build_number: new_version)
+          p build
+          commit_version_bump(
+            xcodeproj: ENV["APP_PROJECT"],
+            message: "[ver++] (#{build})",
+            force: true
+          )
+      push_to_git_remote(remote: "origin", local_branch: "HEAD", remote_branch: options[:remote_branch], force: false)
+    end
 
 
 platform :ios do
