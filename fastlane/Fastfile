@@ -52,16 +52,18 @@ lane :tests do
 end
 
     lane :versionbump do |options|
-      p options[:remote_branch]
-          version = get_version_number(target: "Hero (iOS)")
-          p version
-          new_version = increment_version_number(version_number: version)
-          p new_version
-          build = increment_build_number(build_number: new_version)
-          p build
+    #   p options[:remote_branch]
+    #       version = get_version_number(target: "Hero (iOS)")
+    #       p version
+    #       new_version = increment_version_number(version_number: version)
+    #       p new_version
+        #   build = increment_build_number(build_number: new_version)
+        #   p build
+        increment_build_number
+
           commit_version_bump(
             xcodeproj: ENV["APP_PROJECT"],
-            message: "[ver++] (#{build})",
+            message: "[ver++]",
             force: true
           )
 
