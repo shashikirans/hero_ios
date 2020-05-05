@@ -1,7 +1,9 @@
 default_platform(:ios)
 
 before_all do
-	sh 'mkdir ../build || true'
+    sh 'mkdir ../build || true'
+    unlock_keychain(path: "/Users/shashiks/Library/Keychains/login.keychain-db",
+    password: "Preethi@3110")
 end
 
 # iOS build - Fill below configuration input as per need.
